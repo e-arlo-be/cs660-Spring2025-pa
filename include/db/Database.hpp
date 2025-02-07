@@ -3,6 +3,7 @@
 #include <db/BufferPool.hpp>
 #include <db/DbFile.hpp>
 #include <memory>
+#include <stdexcept>
 
 /**
  * @brief A database is a collection of files and a BufferPool.
@@ -14,6 +15,7 @@
 namespace db {
     class Database {
         // TODO pa0: add private members
+        std::unordered_map<std::string, std::unique_ptr<DbFile>> catalog;
 
         BufferPool bufferPool;
 

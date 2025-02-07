@@ -10,13 +10,31 @@ Database &db::getDatabase() {
 }
 
 void Database::add(std::unique_ptr<DbFile> file) {
-    // TODO pa0
+    if (this->catalog.find(file->getName()) != this->catalog.end()) {
+        throw std::logic_error("Named file already exists in the catalog");
+    }
+    else {
+        this->catalog[file->getName()] = std::move(file);
+    }
 }
 
 std::unique_ptr<DbFile> Database::remove(const std::string &name) {
-    // TODO pa0
+    if (this->catalog.find(name) == this->catalog.end()) {
+        throw std::logic_error("No such name in the catalog");
+    }
+    else {
+        this->bufferPool.flushFile(name);
+        std::unique_ptr<DbFile> file = std::move(this->catalog[name]);
+        this->catalog.erase(name);
+        return file;
+    }
 }
 
 DbFile &Database::get(const std::string &name) const {
-    // TODO pa0
+    if (this->catalog.find(name) == this->catalog.end()) {
+        throw std::logic_error("No such name in the catalog");
+    }
+    else {
+        return *this->catalog.at(name);
+    }
 }
