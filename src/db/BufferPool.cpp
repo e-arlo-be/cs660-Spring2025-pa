@@ -81,13 +81,11 @@ void BufferPool::flushPage(const PageId &pid) {
         Database &db = getDatabase();
         DbFile &file = db.get(pid.file);
 
-        std::cout << "Flushing page " << pid.page << " to file " << pid.file << std::endl;
         file.writePage(this->pages[pid], pid.page);
 
         dirty.erase(pid); 
     }
 }
-
 
 void BufferPool::flushFile(const std::string &file) {
     std::vector<PageId> toFlush;
