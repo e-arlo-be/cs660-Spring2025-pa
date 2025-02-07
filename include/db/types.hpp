@@ -25,6 +25,12 @@ namespace db {
         bool operator==(const PageId &) const = default;
     };
 
+    struct PageIdHash {
+        std::size_t operator()(const PageId& pid) const {
+            return std::hash<std::string>()(pid.file) ^ (std::hash<size_t>()(pid.page) << 1);
+     }
+    };
+
     constexpr size_t DEFAULT_PAGE_SIZE = 4096;
 
     using Page = std::array<uint8_t, DEFAULT_PAGE_SIZE>;

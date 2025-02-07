@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
+#include <set>
 
 namespace db {
     constexpr size_t DEFAULT_NUM_PAGES = 50;
@@ -17,7 +18,10 @@ namespace db {
  * @note A BufferPool owns the Page objects that are stored in it.
  */
     class BufferPool {
-        // TODO pa0: add private members
+        std::unordered_map<PageId, Page, PageIdHash> pages;
+        std::unordered_set<PageId, PageIdHash> dirty;
+        std::vector<db::PageId> lru;
+        int numPages;
 
     public:
         /**
@@ -87,5 +91,7 @@ namespace db {
          * @note This method should call BufferPool::flushPage(pid).
          */
         void flushFile(const std::string &file);
+
+        void updateLRU(const PageId &pid);
     };
 } // namespace db
