@@ -1,6 +1,9 @@
 #pragma once
 
 #include <db/Query.hpp>
+#include <vector>
+#include <stdexcept>
+#include <iostream>
 
 namespace db {
 
@@ -8,7 +11,33 @@ namespace db {
  * A class to represent a fixed-width histogram over a single integer-based field.
  */
     class ColumnStats {
-        // TODO pa4: add private members
+        unsigned buckets;
+        int min;
+        int max;
+        int width;
+        int total;
+        std::vector<size_t> histogram;
+
+        void printHistogram() const {
+            for (size_t i = 0; i < histogram.size(); ++i) {
+                std::cout << "Bucket " << i << ": " << histogram[i] << std::endl;
+                std::cout << "Left edge: " << min + i * width << std::endl;
+                std::cout << "Right edge: " << min + (i + 1) * width << std::endl;
+            }
+        }
+        inline int getIndex(int v) const {
+            if (v < min || v > max) {
+                throw std::out_of_range("Value out of range");
+            }
+            int index = (v - min) / width;
+
+            /* accounts for the case where max-min % buckets is 0,
+            and v is the maximum value*/
+            if (index >= buckets) {
+                index = buckets - 1;
+            }
+            return index;
+        }
 
     public:
         /**

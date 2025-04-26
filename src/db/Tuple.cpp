@@ -144,6 +144,11 @@ void TupleDesc::serialize(uint8_t *data, const Tuple &t) const {
     }
 }
 
+/* helper method for mapping field intex to field type */
+type_t db::TupleDesc::field_type(size_t i) const {
+    return types.at(i);   
+}
+
 db::TupleDesc TupleDesc::merge(const TupleDesc &td1, const TupleDesc &td2) {
     // TODO pa1
     std::vector<type_t> types(td1.types);

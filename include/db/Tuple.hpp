@@ -90,6 +90,8 @@ namespace db {
          */
         Tuple deserialize(const uint8_t *data) const;
 
+        type_t field_type(size_t i) const;
+
         /**
          * @brief Merge two TupleDescs
          * @details The merged TupleDesc has all the fields of the two TupleDescs
